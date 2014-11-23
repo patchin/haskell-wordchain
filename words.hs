@@ -40,7 +40,6 @@
    Maybe there is some result from Gray Code theory that could help us optimize the search?
 -}
 
--- import Data.HashTable
 import Data.List
 import Data.Ord
 import Data.Char
@@ -70,18 +69,13 @@ getNeighbours word (x:xs)
 	
 createNode word list = (word, getNeighbours word list)
 
--- createTable [] wordList = []
--- createTable (x:xs) wordList = createNode x wordList : createTable xs wordList
 createTable [] wordList oldMap = oldMap
 createTable (x:xs) wordList oldMap = createTable xs wordList (Map.insert key value oldMap)  
 	where node = createNode x wordList
       	      key = fst node
       	      value = snd node
 
--- getTableEntry key table = filter (\x -> fst x == key) table 
 getTableEntry key table = Map.lookup key table
-
--- getEntry key = head (getTableEntry key hashTable)
 
 maxPathLength = 5 
 
@@ -103,7 +97,6 @@ getDistance start finish currLength path hashTable
 main = do 
        s <- readFile "input.txt" 
        let t = words s
-       -- let hashTable = createTable t t
        let hashTable = createTable t t (Map.empty)
        putStrLn "Enter start:" 
        start <- getLine 
